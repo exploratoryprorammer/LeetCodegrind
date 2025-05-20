@@ -1,11 +1,15 @@
-import { dbConnect } from "../../db/db"
+import { getProblemsCollection } from "../../db/db"
 import Problem from "../../model/Problem"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
-    await dbConnect()
     const {coder, title } = await request.json()
-    const problems = await Problem.create({ coder, title})
-    return NextResponse.json({problems})
+    const collection = await getProblemsCollection();
+    const result = await collection.insertOne({
+        coder, 
+        title,
+        date: new Date()
+    })
+    return NextResponse.json({ success: true, id: result.insertedId})
     
 }

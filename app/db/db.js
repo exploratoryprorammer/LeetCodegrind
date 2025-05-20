@@ -1,26 +1,21 @@
-import mongoose from 'mongoose'
+import { MongoClient, ServerApiVersion } from "mongodb"
+const uri = "mongodb+srv://rohanksah:mIVbewWjQ5HbROWN@leetcodecluster.krk2dri.mongodb.net/?retryWrites=true&w=majority&appName=LeetcodeCluster";
 
-global.mongoose = {
-    conn: null,
-    promise: null,
-};
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
 
-export async function dbConnect() {
-    if (global.mongoose && global.mongoose.conn) {
-        console.log('already connected')
-        return global.mongoose.conn;
-    } 
-    else {
-        const conString = process.env.MONGO_URI
-        const promise = mongoose.connect(conString, {
-            autoIndex: true
-        });
-
-        global.mongoose = {
-            conn: await promise,
-            promise,
-        };
-        console.log("Newly connected");
-        return await promise
-    }
+export async function getProblemsCollection() {
+  if (!client.topology || !client.topology.isConnected()) {
+    await client.connect();
+  }
+  // Use a single database, e.g., "leetcode"
+  return client.db("leetcode").collection("problems")
 }
+
+export { client }

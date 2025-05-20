@@ -9,14 +9,14 @@ export default function Home() {
   const [coder, setCoder] = useState("");
   const [open, setOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
-  type Problem = { _id: string; title: string; date: string };
+  type Problem = { _id: string; coder: string; title: string; date: string };
   const [problems, setProblems] = useState<Problem[]>([]);
   const [today, setToday] = useState(0);
   const [total, setTotal] = useState(0);
 
   const getproblems = async () => {
     if (!coder) return;
-    const res = await fetch("https://leetcodegrind.vercel.app/api/getproblems", {
+    const res = await fetch("/api/getproblems", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ coder }),
@@ -27,7 +27,7 @@ export default function Home() {
 
   const setcharts = async () => {
     if (!coder) return;
-    const res = await fetch("https://leetcodegrind.vercel.app/api/getproblems", {
+    const res = await fetch("/api/getproblems", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ coder }),
@@ -67,7 +67,7 @@ export default function Home() {
 
   const addProblem = async (Problem: string) => {
     if (coder) {
-      const res = await fetch("https://leetcodegrind.vercel.app/api/addproblem", {
+      const res = await fetch("/api/addproblem", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ coder, title: Problem }),
