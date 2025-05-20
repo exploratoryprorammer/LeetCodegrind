@@ -1,15 +1,11 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
 import { Button, Divider, Modal, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import { Box } from "@mui/material";
 import DonutChart from "react-donut-chart";
 
 export default function Home() {
-  const [scorerohan, setscoreRohan] = useState(0);
-  const [scoregerson, setscoreGerson] = useState(0);
   const [coder, setCoder] = useState("");
   const [open, setOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
