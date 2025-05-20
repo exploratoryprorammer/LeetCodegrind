@@ -16,7 +16,7 @@ export default function Home() {
 
   const getproblems = async () => {
     if (!coder) return;
-    const res = await fetch("/api/getproblems", {
+    const res = await fetch("https://leetcodegrind.vercel.app/api/getproblems", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ coder }),
@@ -27,7 +27,7 @@ export default function Home() {
 
   const setcharts = async () => {
     if (!coder) return;
-    const res = await fetch("/api/getproblems", {
+    const res = await fetch("https://leetcodegrind.vercel.app/api/getproblems", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ coder }),
@@ -67,7 +67,7 @@ export default function Home() {
 
   const addProblem = async (Problem: string) => {
     if (coder) {
-      const res = await fetch("api/addproblem", {
+      const res = await fetch("https://leetcodegrind.vercel.app/api/addproblem", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ coder, title: Problem }),
