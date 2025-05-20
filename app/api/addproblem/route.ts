@@ -1,5 +1,4 @@
 import { getProblemsCollection } from "../../db/db"
-import Problem from "../../model/Problem"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
