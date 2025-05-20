@@ -1,4 +1,3 @@
-import { error } from "console"
 import { dbConnect } from "../../db/db"
 import Problem from "../../model/Problem"
 import { NextResponse } from "next/server"

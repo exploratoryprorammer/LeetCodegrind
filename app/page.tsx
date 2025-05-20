@@ -65,7 +65,7 @@ export default function Home() {
     setDelOpen(false);
   };
 
-  const addProblem = async (Problem: String) => {
+  const addProblem = async (Problem: string) => {
     if (coder) {
       const res = await fetch("api/addproblem", {
         method: "POST",
