@@ -36,7 +36,7 @@ export default function Home() {
     setTotal(data.problems.length);
     const todayStr = new Date().toISOString().slice(0, 10);
     const problemsToday = data.problems.filter(
-      (p:any) => new Date(p.date).toISOString().slice(0, 10) === todayStr
+      (p: string) => new Date(p.date).toISOString().slice(0, 10) === todayStr
     );
     setToday(problemsToday.length);
   };

@@ -7,4 +7,5 @@ export async function POST(request: Request) {
     const {coder, title } = await request.json()
     const problems = await Problem.create({ coder, title})
     return NextResponse.json({problems})
+    
 }
