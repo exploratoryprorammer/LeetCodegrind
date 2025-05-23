@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb"
-const uri = process.env.MONGO_URI || "mongodb+srv://rohanksah:mIVbewWjQ5HbROWN@leetcodecluster.krk2dri.mongodb.net/";
+const uri = process.env.MONGO_URI;
 
 // Use default options for Atlas (no need for { tls: true })
 const client = new MongoClient(uri);

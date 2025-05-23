@@ -76,7 +76,7 @@ export default function Home() {
       if (data.success) {
         console.log("added", Problem, coder);
       }
-      getproblems()
+      getproblems();
     }
   };
 
@@ -131,12 +131,12 @@ export default function Home() {
             problems for the Summer of 2025
           </h1>
         )}
-        {(coder == "Rohan") && (
+        {coder == "Rohan" && (
           <div>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
-                Hey {coder}! Use the tools to start logging your Leet Code questions and achievements.
-
+                Hey {coder}! Use the tools to start logging your Leet Code
+                questions and achievements.
               </Typography>
               <Grid padding={10} marginLeft={20} container spacing={10}>
                 <Button variant="contained" onClick={handleOpen}>
@@ -272,12 +272,12 @@ export default function Home() {
             </div>
           </div>
         )}
-        {(coder == "Gerson") && (
+        {coder == "Gerson" && (
           <div>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
-                Hey {coder}! Use the tools to start logging your Leet Code questions and achievements.
-
+                Hey {coder}! Use the tools to start logging your Leet Code
+                questions and achievements.
               </Typography>
               <Grid padding={10} marginLeft={20} container spacing={10}>
                 <Button variant="contained" onClick={handleOpen}>
@@ -393,8 +393,8 @@ export default function Home() {
                   },
                   {
                     label: "Incomplete",
-                    value: Math.min(Math.round(100 - (today * 100)), 100),
-                  }
+                    value: Math.min(Math.round(100 - today * 100), 100),
+                  },
                 ]}
               />
 
