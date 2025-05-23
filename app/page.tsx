@@ -248,11 +248,11 @@ export default function Home() {
                 data={[
                   {
                     label: "Completed Today",
-                    value: Math.min(Math.round((today / 3) * 100), 100),
+                    value: today,
                   },
                   {
                     label: "Incomplete",
-                    value: Math.min(Math.round(100 - (today / 3) * 100), 100),
+                    value: Math.max(3 - today, 0),
                   },
                 ]}
               />
@@ -261,11 +261,11 @@ export default function Home() {
                 data={[
                   {
                     label: "Total Completed",
-                    value: Math.min(Math.round((total / 150) * 100), 100),
+                    value: total,
                   },
                   {
                     label: "Incomplete",
-                    value: Math.min(Math.round(100 - (total / 150) * 100), 100),
+                    value: Math.max(150 - total, 0),
                   },
                 ]}
               />
@@ -389,11 +389,11 @@ export default function Home() {
                 data={[
                   {
                     label: "Completed Today",
-                    value: Math.min(Math.round(today * 100), 100),
+                    value: today,
                   },
                   {
                     label: "Incomplete",
-                    value: Math.min(Math.round(100 - today * 100), 100),
+                    value: Math.max(1 - today, 0),
                   },
                 ]}
               />
@@ -402,11 +402,11 @@ export default function Home() {
                 data={[
                   {
                     label: "Total Completed",
-                    value: Math.min(Math.round((total / 75) * 100), 100),
+                    value: total,
                   },
                   {
                     label: "Incomplete",
-                    value: Math.min(Math.round(100 - (total / 75) * 100), 100),
+                    value: Math.max(100 - total, 0),
                   },
                 ]}
               />
