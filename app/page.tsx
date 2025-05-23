@@ -1,8 +1,6 @@
 "use client";
-import { Button, Divider, Modal, Typography } from "@mui/material";
+import { Button, Divider, Modal, Typography, Grid, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
-import { Box } from "@mui/material";
 import DonutChart from "react-donut-chart";
 
 export default function Home() {
@@ -16,7 +14,6 @@ export default function Home() {
   const [leaderboard, setLeaderboard] = useState<
     { coder: string; total: number }[]
   >([]);
-
   const getproblems = async () => {
     if (!coder) return;
     const res = await fetch("/api/getproblems", {
@@ -121,66 +118,57 @@ export default function Home() {
   }, [coder]);
 
   return (
-    <Divider
+    <Box
       sx={{
-        minWidth: "100vw",
+        display: "flex",
         minHeight: "100vh",
+        width: "100vw",
         backgroundColor: "#f7efd2",
+        overflow: "hidden",
       }}
     >
-      <Grid container spacing={10}>
-        <Box padding={5}>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{ fontSize: 22, padding: "16px" }}
-            onClick={setHome}
-          >
-            Home
-          </Button>
-        </Box>
-        <Box padding={5}>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{ fontSize: 22, padding: "16px" }}
-            onClick={setRohan}
-          >
-            Rohan
-          </Button>
-        </Box>
-        <Box padding={5}>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{ fontSize: 22, padding: "16px" }}
-            onClick={setGerson}
-          >
-            Gerson
-          </Button>
-        </Box>
-        <Box padding={5}>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{ fontSize: 22, padding: "16px" }}
-            onClick={setBarghav}
-          >
-            Bhargav
-          </Button>
-        </Box>
-      </Grid>
       <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        height="80vh"
+        sx={{
+          width: { xs: 90, sm: 140 },
+          minWidth: { xs: 90, sm: 140 },
+          background: "#f7efd2",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          pl: 3,
+          py: 4,
+          zIndex: 2,
+          gap: 2,
+        }}
+      >
+        <SidebarButton onClick={setHome} label="Home" />
+        <SidebarButton onClick={setRohan} label="Rohan" />
+        <SidebarButton onClick={setGerson} label="Gerson" />
+        <SidebarButton onClick={setBarghav} label="Bhargav" />
+      </Box>
+      <Box
+        sx={{
+          flex: 1,
+          overflowY: "auto",
+          height: "100vh",
+          px: { xs: 2, sm: 6 },
+          py: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
       >
         {!coder && (
-          <>
+          <Box>
             <h1
-              style={{ fontWeight: 700, fontSize: "2.2rem", marginBottom: 24 }}
+              style={{
+                fontWeight: 700,
+                fontSize: "2.2rem",
+                marginBottom: 24,
+                textAlign: "center",
+                maxWidth: 500,
+                lineHeight: 1.2,
+              }}
             >
               Welcome! Select your name below to start tracking your LeetCode
               progress for Summer 2025.
@@ -209,7 +197,7 @@ export default function Home() {
                   marginBottom: 2,
                 }}
               >
-                🏆 Leaderboard
+                Leaderboard
               </Typography>
               <ol style={{ fontSize: 22, paddingLeft: 24, margin: 0 }}>
                 {leaderboard.map((entry, idx) => (
@@ -221,18 +209,9 @@ export default function Home() {
                       color: idx === 0 ? "#228B22" : "#444",
                       background: idx === 0 ? "#e6ffe6" : "transparent",
                       borderRadius: 6,
-                      padding: idx === 0 ? "6px 12px" : "0",
+                      padding: "0",
                     }}
                   >
-                    <span style={{ marginRight: 8 }}>
-                      {idx === 0
-                        ? "🥇"
-                        : idx === 1
-                        ? "🥈"
-                        : idx === 2
-                        ? "🥉"
-                        : ""}
-                    </span>
                     {entry.coder}:{" "}
                     <span style={{ color: "#b8860b" }}>{entry.total}</span>{" "}
                     problems solved
@@ -240,10 +219,10 @@ export default function Home() {
                 ))}
               </ol>
             </Box>
-          </>
+          </Box>
         )}
         {coder == "Rohan" && (
-          <div>
+          <Box>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
                 Hi {coder}! Record your LeetCode work and keep your progress
@@ -251,7 +230,7 @@ export default function Home() {
               </Typography>
               <Box display="flex" justifyContent="center" mt={2}>
                 <a
-                  href="https://leetcode.com"
+                  href="https://leetcode.com/problem-list/oizxjoit/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -268,7 +247,29 @@ export default function Home() {
                     display: "inline-block",
                   }}
                 >
-                  Visit LeetCode.com
+                  Bling 75
+                </a>
+              </Box>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <a
+                  href="https://neetcode.io/roadmap"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: "#fff",
+                    background: "#ffa116",
+                    padding: "8px 18px",
+                    borderRadius: 6,
+                    fontWeight: 600,
+                    fontSize: 18,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                    transition: "background 0.2s",
+                    marginBottom: 8,
+                    display: "inline-block",
+                  }}
+                >
+                  Neetcode 150
                 </a>
               </Box>
               <Grid padding={10} marginLeft={20} container spacing={10}>
@@ -403,10 +404,10 @@ export default function Home() {
                 ]}
               />
             </div>
-          </div>
+          </Box>
         )}
         {coder == "Gerson" && (
-          <div>
+          <Box>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
                 Hi {coder}! Add your LeetCode problems and review your daily
@@ -414,7 +415,7 @@ export default function Home() {
               </Typography>
               <Box display="flex" justifyContent="center" mt={2}>
                 <a
-                  href="https://leetcode.com"
+                  href="https://leetcode.com/problem-list/oizxjoit/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -431,7 +432,29 @@ export default function Home() {
                     display: "inline-block",
                   }}
                 >
-                  Visit LeetCode.com
+                  Bling 75
+                </a>
+              </Box>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <a
+                  href="https://neetcode.io/roadmap"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: "#fff",
+                    background: "#ffa116",
+                    padding: "8px 18px",
+                    borderRadius: 6,
+                    fontWeight: 600,
+                    fontSize: 18,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                    transition: "background 0.2s",
+                    marginBottom: 8,
+                    display: "inline-block",
+                  }}
+                >
+                  Neetcode 150
                 </a>
               </Box>
               <Grid padding={10} marginLeft={20} container spacing={10}>
@@ -566,10 +589,10 @@ export default function Home() {
                 ]}
               />
             </div>
-          </div>
+          </Box>
         )}
         {coder == "Bhargav" && (
-          <div>
+          <Box>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
                 Hi {coder}! Log your LeetCode activity and monitor your results
@@ -577,7 +600,7 @@ export default function Home() {
               </Typography>
               <Box display="flex" justifyContent="center" mt={2}>
                 <a
-                  href="https://leetcode.com"
+                  href="https://leetcode.com/problem-list/oizxjoit/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -594,7 +617,29 @@ export default function Home() {
                     display: "inline-block",
                   }}
                 >
-                  Visit LeetCode.com
+                  Bling 75
+                </a>
+              </Box>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <a
+                  href="https://neetcode.io/roadmap"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: "#fff",
+                    background: "#ffa116",
+                    padding: "8px 18px",
+                    borderRadius: 6,
+                    fontWeight: 600,
+                    fontSize: 18,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                    transition: "background 0.2s",
+                    marginBottom: 8,
+                    display: "inline-block",
+                  }}
+                >
+                  Neetcode 150
                 </a>
               </Box>
               <Grid padding={10} marginLeft={20} container spacing={10}>
@@ -729,9 +774,45 @@ export default function Home() {
                 ]}
               />
             </div>
-          </div>
+          </Box>
         )}
       </Box>
-    </Divider>
+    </Box>
+  );
+}
+function SidebarButton({
+  onClick,
+  label,
+}: {
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <Button
+      fullWidth
+      variant="contained"
+      size="large"
+      onClick={onClick}
+      sx={{
+        fontSize: 20,
+        py: 2,
+        borderRadius: 3,
+        background:
+          "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
+        color: "black",
+        fontWeight: 700,
+        boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+        mb: 1.5,
+        transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+        "&:hover": {
+          background:
+            "linear-gradient(90deg,rgb(137, 118, 46) 0%, #f7c873 100%)",
+          color: "black",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+        },
+      }}
+    >
+      {label}
+    </Button>
   );
 }
