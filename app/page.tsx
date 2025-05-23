@@ -170,7 +170,7 @@ export default function Home() {
                 lineHeight: 1.2,
               }}
             >
-              Welcome! Select your name below to start tracking your LeetCode
+              Welcome! Select your name below to start tracking your L**tCode
               progress for Summer 2025.
             </h1>
             <Box
@@ -225,7 +225,7 @@ export default function Home() {
           <Box>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
-                Hi {coder}! Record your LeetCode work and keep your progress
+                Hi {coder}! Record your L**tCode work and keep your progress
                 organized.
               </Typography>
               <Box display="flex" justifyContent="center" mt={2}>
@@ -297,7 +297,7 @@ export default function Home() {
                 }}
               >
                 <Typography variant="h6" mb={2}>
-                  Add a LeetCode Problem
+                  Add a L**tCode Problem
                 </Typography>
                 <form
                   onSubmit={async (e) => {
@@ -351,7 +351,7 @@ export default function Home() {
                 }}
               >
                 <Typography variant="h6" mb={2}>
-                  Delete a LeetCode Problem.
+                  Delete a L**tCode Problem.
                 </Typography>
                 <ul style={{ maxHeight: 200, overflowY: "auto", padding: 0 }}>
                   {problems.map((p) => (
@@ -410,7 +410,7 @@ export default function Home() {
           <Box>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
-                Hi {coder}! Add your LeetCode problems and review your daily
+                Hi {coder}! Add your L**tCode problems and review your daily
                 stats.
               </Typography>
               <Box display="flex" justifyContent="center" mt={2}>
@@ -482,7 +482,7 @@ export default function Home() {
                 }}
               >
                 <Typography variant="h6" mb={2}>
-                  Add a LeetCode Problem
+                  Add a L**tCode Problem
                 </Typography>
                 <form
                   onSubmit={async (e) => {
@@ -536,7 +536,7 @@ export default function Home() {
                 }}
               >
                 <Typography variant="h6" mb={2}>
-                  Delete a LeetCode Problem.
+                  Delete a L**tCode Problem.
                 </Typography>
                 <ul style={{ maxHeight: 200, overflowY: "auto", padding: 0 }}>
                   {problems.map((p) => (
@@ -595,7 +595,7 @@ export default function Home() {
           <Box>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
-                Hi {coder}! Log your LeetCode activity and monitor your results
+                Hi {coder}! Log your L**tCode activity and monitor your results
                 here.
               </Typography>
               <Box display="flex" justifyContent="center" mt={2}>
@@ -667,7 +667,7 @@ export default function Home() {
                 }}
               >
                 <Typography variant="h6" mb={2}>
-                  Add a LeetCode Problem
+                  Add a L**tCode Problem
                 </Typography>
                 <form
                   onSubmit={async (e) => {
@@ -721,7 +721,7 @@ export default function Home() {
                 }}
               >
                 <Typography variant="h6" mb={2}>
-                  Delete a LeetCode Problem.
+                  Delete a L**tCode Problem.
                 </Typography>
                 <ul style={{ maxHeight: 200, overflowY: "auto", padding: 0 }}>
                   {problems.map((p) => (
