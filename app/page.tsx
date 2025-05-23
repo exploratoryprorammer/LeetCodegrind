@@ -131,7 +131,7 @@ export default function Home() {
             problems for the Summer of 2025
           </h1>
         )}
-        {(coder == "Rohan" || coder == "Gerson") && (
+        {(coder == "Rohan") && (
           <div>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
@@ -248,11 +248,11 @@ export default function Home() {
                 data={[
                   {
                     label: "Completed Today",
-                    value: Math.min(Math.round((total / 3) * 100), 100),
+                    value: Math.min(Math.round((today / 3) * 100), 100),
                   },
                   {
                     label: "Incomplete",
-                    value: Math.min(Math.round(100 - (total / 3) * 100), 100),
+                    value: Math.min(Math.round(100 - (today / 3) * 100), 100),
                   },
                 ]}
               />
@@ -261,11 +261,152 @@ export default function Home() {
                 data={[
                   {
                     label: "Total Completed",
-                    value: Math.min(Math.round((today / 150) * 100), 100),
+                    value: Math.min(Math.round((total / 150) * 100), 100),
                   },
                   {
                     label: "Incomplete",
-                    value: Math.min(Math.round(100 - (today / 150) * 100), 100),
+                    value: Math.min(Math.round(100 - (total / 150) * 100), 100),
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        )}
+        {(coder == "Gerson") && (
+          <div>
+            <Divider sx={{ marginLeft: 0 }}>
+              <Typography variant="h4" align="center">
+                Hey {coder}! Use the tools to start logging your Leet Code questions and achievements.
+
+              </Typography>
+              <Grid padding={10} marginLeft={20} container spacing={10}>
+                <Button variant="contained" onClick={handleOpen}>
+                  <h1>Add Problem</h1>
+                </Button>
+                <Button variant="contained" onClick={handleDeleteProblem}>
+                  <h1>Delete Problem</h1>
+                </Button>
+              </Grid>
+            </Divider>
+
+            <Modal open={open} onClose={handleClose}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 4,
+                  borderRadius: 2,
+                  minWidth: 350,
+                }}
+              >
+                <Typography variant="h6" mb={2}>
+                  Add a LeetCode Problem
+                </Typography>
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    const problemTitle = formData.get("problemTitle") as string;
+                    await addProblem(problemTitle);
+                    handleClose();
+                  }}
+                >
+                  <input
+                    name="problemTitle"
+                    placeholder="Enter problem title"
+                    style={{
+                      width: "100%",
+                      padding: "10px",
+                      marginBottom: "16px",
+                      fontSize: "16px",
+                      borderRadius: "4px",
+                      border: "1px solid #ccc",
+                    }}
+                    required
+                  />
+                  <Box display="flex" justifyContent="flex-end" gap={2}>
+                    <Button
+                      onClick={handleClose}
+                      color="secondary"
+                      variant="outlined"
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" variant="contained">
+                      Add
+                    </Button>
+                  </Box>
+                </form>
+              </Box>
+            </Modal>
+            <Modal open={delOpen} onClose={handleDelClose}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 4,
+                  borderRadius: 2,
+                  minWidth: 350,
+                }}
+              >
+                <Typography variant="h6" mb={2}>
+                  Delete a LeetCode Problem.
+                </Typography>
+                <ul style={{ maxHeight: 200, overflowY: "auto", padding: 0 }}>
+                  {problems.map((p) => (
+                    <li
+                      key={p._id}
+                      style={{ marginBottom: 8, listStyle: "none" }}
+                    >
+                      <span>{p.title}</span>
+                      <Button
+                        onClick={async () => {
+                          await fetch("/api/deleteproblem", {
+                            method: "DELETE",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ id: p._id }),
+                          });
+                          getproblems();
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </Box>
+            </Modal>
+            <div>
+              <DonutChart
+                data={[
+                  {
+                    label: "Completed Today",
+                    value: Math.min(Math.round(today * 100), 100),
+                  },
+                  {
+                    label: "Incomplete",
+                    value: Math.min(Math.round(100 - (today * 100)), 100),
+                  }
+                ]}
+              />
+
+              <DonutChart
+                data={[
+                  {
+                    label: "Total Completed",
+                    value: Math.min(Math.round((total / 75) * 100), 100),
+                  },
+                  {
+                    label: "Incomplete",
+                    value: Math.min(Math.round(100 - (total / 75) * 100), 100),
                   },
                 ]}
               />

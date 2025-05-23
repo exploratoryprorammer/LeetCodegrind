@@ -1,8 +1,8 @@
 import { MongoClient } from "mongodb"
 const uri = process.env.MONGO_URI || "mongodb+srv://rohanksah:mIVbewWjQ5HbROWN@leetcodecluster.krk2dri.mongodb.net/";
 
-// Use default options for Atlas
-const client = new MongoClient(uri, { tls: true });
+// Use default options for Atlas (no need for { tls: true })
+const client = new MongoClient(uri);
 
 export async function getProblemsCollection() {
   if (!client.topology || !client.topology.isConnected()) {
