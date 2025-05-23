@@ -249,6 +249,28 @@ export default function Home() {
                 Hi {coder}! Record your LeetCode work and keep your progress
                 organized.
               </Typography>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <a
+                  href="https://leetcode.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: "#fff",
+                    background: "#ffa116",
+                    padding: "8px 18px",
+                    borderRadius: 6,
+                    fontWeight: 600,
+                    fontSize: 18,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                    transition: "background 0.2s",
+                    marginBottom: 8,
+                    display: "inline-block",
+                  }}
+                >
+                  Visit LeetCode.com
+                </a>
+              </Box>
               <Grid padding={10} marginLeft={20} container spacing={10}>
                 <Button variant="contained" onClick={handleOpen}>
                   <h1>Add Problem</h1>
@@ -363,7 +385,7 @@ export default function Home() {
                   },
                   {
                     label: "Incomplete",
-                    value: Math.max(1 - today, 0),
+                    value: Math.max(2 - today, 0),
                   },
                 ]}
               />
@@ -390,6 +412,28 @@ export default function Home() {
                 Hi {coder}! Add your LeetCode problems and review your daily
                 stats.
               </Typography>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <a
+                  href="https://leetcode.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: "#fff",
+                    background: "#ffa116",
+                    padding: "8px 18px",
+                    borderRadius: 6,
+                    fontWeight: 600,
+                    fontSize: 18,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                    transition: "background 0.2s",
+                    marginBottom: 8,
+                    display: "inline-block",
+                  }}
+                >
+                  Visit LeetCode.com
+                </a>
+              </Box>
               <Grid padding={10} marginLeft={20} container spacing={10}>
                 <Button variant="contained" onClick={handleOpen}>
                   <h1>Add Problem</h1>
@@ -531,6 +575,28 @@ export default function Home() {
                 Hi {coder}! Log your LeetCode activity and monitor your results
                 here.
               </Typography>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <a
+                  href="https://leetcode.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: "#fff",
+                    background: "#ffa116",
+                    padding: "8px 18px",
+                    borderRadius: 6,
+                    fontWeight: 600,
+                    fontSize: 18,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                    transition: "background 0.2s",
+                    marginBottom: 8,
+                    display: "inline-block",
+                  }}
+                >
+                  Visit LeetCode.com
+                </a>
+              </Box>
               <Grid padding={10} marginLeft={20} container spacing={10}>
                 <Button variant="contained" onClick={handleOpen}>
                   <h1>Add Problem</h1>
