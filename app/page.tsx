@@ -247,7 +247,7 @@ export default function Home() {
                     display: "inline-block",
                   }}
                 >
-                  Bling 75
+                  Blind 75
                 </a>
               </Box>
               <Box display="flex" justifyContent="center" mt={2}>
@@ -432,7 +432,7 @@ export default function Home() {
                     display: "inline-block",
                   }}
                 >
-                  Bling 75
+                  Blind 75
                 </a>
               </Box>
               <Box display="flex" justifyContent="center" mt={2}>
@@ -617,7 +617,7 @@ export default function Home() {
                     display: "inline-block",
                   }}
                 >
-                  Bling 75
+                  Blind 75
                 </a>
               </Box>
               <Box display="flex" justifyContent="center" mt={2}>
