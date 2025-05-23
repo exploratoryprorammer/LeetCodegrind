@@ -363,7 +363,7 @@ export default function Home() {
                   },
                   {
                     label: "Incomplete",
-                    value: Math.max(3 - today, 0),
+                    value: Math.max(1 - today, 0),
                   },
                 ]}
               />
