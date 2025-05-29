@@ -12,10 +12,12 @@ const Coder = ({ coder }: { coder: CoderType }) => {
   const [delOpen, setDelOpen] = useState(false);
   const [today, setToday] = useState(0);
   const [total, setTotal] = useState(0);
+  const [searchbar, setSearchbar] = useState("")
 
+  
   const getproblems = async () => {
     if (!coder) return;
-    const res = await fetch("/api/getproblems", {
+    const res = await fetch("/api/problem/getproblems", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ coder: coder.name }),
@@ -28,7 +30,7 @@ const Coder = ({ coder }: { coder: CoderType }) => {
 
   const addProblem = async (Problem: string) => {
     if (coder) {
-      const res = await fetch("/api/addproblem", {
+      const res = await fetch("/api/problem/addproblem", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ coder: coder.name, title: Problem }),
@@ -43,7 +45,7 @@ const Coder = ({ coder }: { coder: CoderType }) => {
 
   const setcharts = async () => {
     if (!coder) return;
-    const res = await fetch("/api/getproblems", {
+    const res = await fetch("/api/problem/getproblems", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ coder: coder.name }),
@@ -62,7 +64,7 @@ const Coder = ({ coder }: { coder: CoderType }) => {
     const coders = ["Rohan", "Gerson", "Bhargav"];
     const results = await Promise.all(
       coders.map(async (c) => {
-        const res = await fetch("/api/getproblems", {
+        const res = await fetch("/api/problem/getproblems", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ coder: c }),
@@ -193,7 +195,8 @@ const Coder = ({ coder }: { coder: CoderType }) => {
               >
                 <input
                   name="problemTitle"
-                  placeholder="Enter problem title"
+                  type="text"
+                  placeholder="Search for Problem"
                   style={{
                     width: "100%",
                     padding: "10px",

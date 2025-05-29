@@ -1,10 +1,11 @@
 import { LeetCode } from "leetcode-query"
-import { use } from "react";
+import { NextResponse } from "next/server";
 
 
-export async function POST(request: Request) {
-    const { username } = await request.json()
+export async function GET() {
     const leetcode = new LeetCode();
-    const user = await leetcode.user(username)
+    const data = await leetcode.problems()
+    const filtered = data.questions.map(a =>  a.title)
+    return NextResponse.json({titles: filtered, success: true})
 }
 

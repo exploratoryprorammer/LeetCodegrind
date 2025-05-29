@@ -6,18 +6,23 @@ import Coder from "./components/Coder";
 import { ProblemContext } from "./Context/ProblemContext";
 import SidebarButton from "./components/SidebarButton";
 import { ProblemType, CoderType } from "./types/types";
-type Problem = { _id: string; coder: string; title: string; date: string };
-
-
+import Authentication from "./components/Authentication";
+import { LeetCode } from "leetcode-query";
 
 export default function Home() {
-  const [coder, setCoder] = useState<CoderType | undefined>(undefined)
-  const [problemset, setProblemset] = useState<Problem[]>([]);
+  const [coder, setCoder] = useState<CoderType | undefined>(undefined);
+  const [problemset, setProblemset] = useState<ProblemType[]>([]);
   const [prompt, setPrompt] = useState("");
   const [leaderboard, setLeaderboard] = useState<
     { coder: string; total: number }[]
   >([]);
-  const [result, setResult] = useState("")
+  const [result, setResult] = useState("");
+
+  const getLeetCodeProblems = async () => {
+    const res = await fetch("api/leetcode");
+    const data = await res.json();
+    console.log(data);
+  };
 
   const airesponse = async () => {
     setPrompt("List the neetcode 150 problems");
@@ -31,33 +36,27 @@ export default function Home() {
     setResult(data.res);
   };
 
-
-
   const setRohan = () => {
-    setCoder({name: "Rohan", goals: 2});
+    setCoder({ name: "Rohan", goals: 2 });
   };
 
   const setGerson = () => {
-    setCoder({name: "Gerson", goals: 1});
+    setCoder({ name: "Gerson", goals: 1 });
   };
 
   const setBarghav = () => {
-    setCoder({name: "Bhargav", goals: 1});
+    setCoder({ name: "Bhargav", goals: 1 });
   };
 
   const setHome = () => {
     setCoder(undefined);
   };
 
-
-
-
-
   const fetchLeaderboard = async () => {
     const coders = ["Rohan", "Gerson", "Bhargav"];
     const results = await Promise.all(
       coders.map(async (c) => {
-        const res = await fetch("/api/getproblems", {
+        const res = await fetch("/api/problem/getproblems", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ coder: c }),
@@ -70,14 +69,17 @@ export default function Home() {
     setLeaderboard(results);
   };
 
-
-
   useEffect(() => {
     if (!coder) fetchLeaderboard();
   }, [coder]);
 
+  useEffect(() => {
+    getLeetCodeProblems();
+  }, []);
+
   return (
-    <ProblemContext.Provider value={{ problemset, setProblemset}}>
+    <ProblemContext.Provider value={{ problemset, setProblemset }}>
+      <Authentication />
       <Box
         sx={{
           display: "flex",

@@ -5,10 +5,13 @@ const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri);
 
 export async function getProblemsCollection() {
-  if (!client.topology || !client.topology.isConnected()) {
-    await client.connect();
-  }
+  await client.connect();
   return client.db("leetcode").collection("problems")
+}
+
+export async function getUsersCollection() {
+  await client.connect();
+  return client.db("leetcode").collection("users")
 }
 
 export { client }

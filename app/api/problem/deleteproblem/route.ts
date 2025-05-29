@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb"
-import { getProblemsCollection } from "../../db/db"
+import { getProblemsCollection } from "../../../utils/db"
 import { NextResponse } from "next/server"
 
 export async function DELETE(request: Request)
