@@ -1,18 +1,19 @@
 import React, { useEffect } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, List, ListItem, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { CoderType } from "../types/types";
 
 const searchBar = ({coder, opened}: {coder: CoderType, opened: boolean}) => {
-  const [open, setOpen] = useState(false);
   const [data, setData] = useState<string[]>([])
-  const [query, setQuery] = useState<string>
+  const [query, setQuery] = useState("")
 
   const getAllLeetCodeProblems = async () => {
     const res = await fetch("api/leetcode");
     const data = await res.json();
     setData(data.titles || [])
   };
+
+  const filtered  = query ? data.filter((title) => title.toLowerCase().includes(query.toLowerCase())) : []
 
   if (opened) {
     getAllLeetCodeProblems()
@@ -22,9 +23,6 @@ const searchBar = ({coder, opened}: {coder: CoderType, opened: boolean}) => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    if(query)
-  })
 
   return (
     <Box
@@ -52,20 +50,29 @@ const searchBar = ({coder, opened}: {coder: CoderType, opened: boolean}) => {
           handleClose();
         }}
       >
-        <input
+        <TextField
           name="problemTitle"
           type="text"
           placeholder="Search for Problem"
-          style={{
+          sx={{
             width: "100%",
             padding: "10px",
             marginBottom: "16px",
             fontSize: "16px",
             borderRadius: "4px",
             border: "1px solid #ccc",
+            mb: 2
           }}
-          required
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
+        {filtered.length > 0 && (
+          <List>
+            {filtered.map((title) => (
+              <ListItem key={title}>{title}</ListItem>
+            ))}
+          </List>
+         )}
         <Box display="flex" justifyContent="flex-end" gap={2}>
           <Button onClick={handleClose} color="secondary" variant="outlined">
             Cancel

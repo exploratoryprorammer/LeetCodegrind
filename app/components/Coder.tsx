@@ -1,4 +1,14 @@
-import { Box, Divider, Typography, Grid, Button, Modal } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Typography,
+  Grid,
+  Button,
+  Modal,
+  List,
+  ListItem,
+  TextField,
+} from "@mui/material";
 import React, { useEffect } from "react";
 import DonutChart from "react-donut-chart";
 import { createContext, useState } from "react";
@@ -12,9 +22,21 @@ const Coder = ({ coder }: { coder: CoderType }) => {
   const [delOpen, setDelOpen] = useState(false);
   const [today, setToday] = useState(0);
   const [total, setTotal] = useState(0);
-  const [searchbar, setSearchbar] = useState("")
+  const [data, setData] = useState<string[]>([]);
+  const [query, setQuery] = useState("");
 
-  
+  const getAllLeetCodeProblems = async () => {
+    const res = await fetch("api/leetcode");
+    const data = await res.json();
+    setData(data.titles || []);
+  };
+
+  const filteredall = data.filter((title) => title.toLowerCase());
+
+  const filtered = query
+    ? data.filter((title) => title.toLowerCase().includes(query.toLowerCase()))
+    : [];
+
   const getproblems = async () => {
     if (!coder) return;
     const res = await fetch("/api/problem/getproblems", {
@@ -77,10 +99,12 @@ const Coder = ({ coder }: { coder: CoderType }) => {
   };
 
   const handleOpen = () => {
+    getAllLeetCodeProblems();
     setOpen(true);
   };
 
   const handleClose = () => {
+    setData([]);
     setOpen(false);
   };
 
@@ -171,20 +195,30 @@ const Coder = ({ coder }: { coder: CoderType }) => {
             <Box
               sx={{
                 position: "absolute",
+                display: "flex",
+                flexDirection: "column",
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
+                width: { xs: "95vw", sm: "70vw", md: "40vw" },
                 bgcolor: "background.paper",
                 boxShadow: 24,
                 p: 4,
                 borderRadius: 2,
-                minWidth: 350,
+                height: "50%",
+                maxHeight: "90vh",
               }}
             >
               <Typography variant="h6" mb={2}>
                 Add a L**tCode Problem
               </Typography>
               <form
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  flex: 1,
+                  minHeight: 0,
+                }}
                 onSubmit={async (e) => {
                   e.preventDefault();
                   const formData = new FormData(e.currentTarget);
@@ -193,21 +227,56 @@ const Coder = ({ coder }: { coder: CoderType }) => {
                   handleClose();
                 }}
               >
-                <input
+                <TextField
                   name="problemTitle"
                   type="text"
                   placeholder="Search for Problem"
-                  style={{
+                  sx={{
                     width: "100%",
                     padding: "10px",
                     marginBottom: "16px",
                     fontSize: "16px",
                     borderRadius: "4px",
                     border: "1px solid #ccc",
+                    mb: 2,
                   }}
-                  required
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                 />
-                <Box display="flex" justifyContent="flex-end" gap={2}>
+
+                <List
+                  sx={{
+                    flex: 1,
+                    minHeight: 0,
+                    width: "100%",
+
+                    overflowY: "auto",
+                  }}
+                >
+                  {query.length === 0
+                    ? filteredall.map((title) => (
+                        <Button
+                          sx={{ width: "100%", color: "black" }}
+                          key={title}
+                        >
+                          <ListItem key={title}>{title}</ListItem>
+                        </Button>
+                      ))
+                    : filtered.map((title) => (
+                        <Button
+                          sx={{ width: "100%", color: "black" }}
+                          key={title}
+                        >
+                          <ListItem key={title}>{title}</ListItem>
+                        </Button>
+                      ))}
+                </List>
+                <Box
+                  paddingY="-10%"
+                  display="flex"
+                  justifyContent="flex-end"
+                  gap={2}
+                >
                   <Button
                     onClick={handleClose}
                     color="secondary"
@@ -229,6 +298,7 @@ const Coder = ({ coder }: { coder: CoderType }) => {
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
+                width: { xs: "95vw", sm: "70vw", md: "40vw" },
                 bgcolor: "background.paper",
                 boxShadow: 24,
                 p: 4,

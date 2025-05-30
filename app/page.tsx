@@ -24,6 +24,15 @@ export default function Home() {
     console.log(data);
   };
 
+  const addFriend = async () => {
+    const res = await fetch("api/user/sendfriendrequest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json"},
+      body: JSON.stringify({})
+    })
+
+  }
+
   const airesponse = async () => {
     setPrompt("List the neetcode 150 problems");
     const res = await fetch("api/ai_features", {
@@ -145,7 +154,7 @@ export default function Home() {
                   padding: 4,
                   minWidth: 340,
                   maxWidth: 420,
-                  margin: "0 auto",
+                  margin: "auto",
                   border: "2px solid #f7efd2",
                 }}
               >
@@ -182,6 +191,55 @@ export default function Home() {
                   ))}
                 </ol>
               </Box>
+              <Grid alignContent="center" padding={10} container spacing={10}>
+                <Button
+                  sx={{
+                    fontSize: 20,
+                    py: 2,
+                    borderRadius: 3,
+                    background:
+                      "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
+                    color: "black",
+                    fontWeight: 700,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                    mb: 1.5,
+                    transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+                    "&:hover": {
+                      background:
+                        "linear-gradient(90deg,rgb(137, 118, 46) 0%, #f7c873 100%)",
+                      color: "black",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+                    },
+                    width: 200
+                  }}
+                >
+                  Add Friend
+                </Button>
+                <Button
+                  sx={{
+                    fontSize: 20,
+                    py: 2,
+                    borderRadius: 3,
+                    background:
+                      "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
+                    color: "black",
+                    fontWeight: 700,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                    mb: 1.5,
+                    transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+                    "&:hover": {
+                      background:
+                        "linear-gradient(90deg,rgb(137, 118, 46) 0%, #f7c873 100%)",
+                      color: "black",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+                    },
+                    width: 200
+
+                  }}
+                >
+                  Remove Friend
+                </Button>
+              </Grid>
             </Box>
           )}
           {coder && <Coder coder={coder} />}
