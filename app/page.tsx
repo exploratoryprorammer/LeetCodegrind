@@ -8,6 +8,7 @@ import SidebarButton from "./components/SidebarButton";
 import { ProblemType, CoderType } from "./types/types";
 import Authentication from "./components/Authentication";
 import { LeetCode } from "leetcode-query";
+import { useUser } from "@clerk/nextjs";
 
 export default function Home() {
   const [coder, setCoder] = useState<CoderType | undefined>(undefined);
@@ -17,6 +18,7 @@ export default function Home() {
     { coder: string; total: number }[]
   >([]);
   const [result, setResult] = useState("");
+  const username = useUser().user?.primaryEmailAddress?.emailAddress;
 
   const getLeetCodeProblems = async () => {
     const res = await fetch("api/leetcode");
@@ -24,14 +26,17 @@ export default function Home() {
     console.log(data);
   };
 
-  const addFriend = async () => {
-    const res = await fetch("api/user/sendfriendrequest", {
-      method: "POST",
-      headers: { "Content-Type": "application/json"},
-      body: JSON.stringify({})
-    })
-
-  }
+  const addFriend = async (freind: string) => {
+    try {
+      const res = await fetch("api/user/sendfriendrequest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, freind }),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const airesponse = async () => {
     setPrompt("List the neetcode 150 problems");
@@ -84,6 +89,7 @@ export default function Home() {
 
   useEffect(() => {
     getLeetCodeProblems();
+    console.log(username);
   }, []);
 
   return (
@@ -210,7 +216,7 @@ export default function Home() {
                       color: "black",
                       boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
                     },
-                    width: 200
+                    width: 200,
                   }}
                 >
                   Add Friend
@@ -233,8 +239,7 @@ export default function Home() {
                       color: "black",
                       boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
                     },
-                    width: 200
-
+                    width: 200,
                   }}
                 >
                   Remove Friend

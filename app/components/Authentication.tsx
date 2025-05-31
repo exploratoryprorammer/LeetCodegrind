@@ -4,21 +4,40 @@ import {
   SignIn,
   SignInButton,
   UserButton,
+  useUser,
 } from "@clerk/nextjs";
 import { AppBar, Button, Toolbar, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Authentication = () => {
+  const username = useUser().user?.primaryEmailAddress?.emailAddress;
+  console.log("username", username);
+
+  const addUser = async () => {
+    const res = await fetch("api/user/adduser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: username }),
+    });
+    const data = await res.json();
+    console.log(data);
+  };
   const router = useRouter();
 
-  const signin = () => {
+  const signin = async () => {
     router.push("/sign-in");
   };
 
-  const signup = () => {
+  const signup = async () => {
     router.push("/sign-up");
   };
+
+  useEffect(() => {
+    if (username) {
+      addUser();
+    }
+  }, [username]);
 
   return (
     <Toolbar
