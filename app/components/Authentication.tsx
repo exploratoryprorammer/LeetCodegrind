@@ -8,21 +8,31 @@ import {
 } from "@clerk/nextjs";
 import { AppBar, Button, Toolbar, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import { useUserContext } from "../contextProvider/userProvider";
 
 const Authentication = () => {
-  const username = useUser().user?.primaryEmailAddress?.emailAddress;
-  console.log("username", username);
+  const {username, setUsername} = useUserContext();
+  const usernamesetter = useUser().user?.primaryEmailAddress?.emailAddress;
+  console.log("username", usernamesetter);
 
-  const addUser = async () => {
-    const res = await fetch("api/user/adduser", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: username }),
-    });
-    const data = await res.json();
-    console.log(data);
+  const addUser = async (emailAddress: string) => {
+    try {
+      const res = await fetch("/api/user/adduser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: emailAddress }),
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to add user: ${res.status}`);
+      }
+      const data = await res.json();
+      console.log("User added successfully:", data);
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
   };
+
   const router = useRouter();
 
   const signin = async () => {
@@ -34,10 +44,11 @@ const Authentication = () => {
   };
 
   useEffect(() => {
-    if (username) {
-      addUser();
+    if (usernamesetter) {
+      setUsername(usernamesetter);
+      addUser(usernamesetter);
     }
-  }, [username]);
+  }, [usernamesetter, setUsername]);
 
   return (
     <Toolbar

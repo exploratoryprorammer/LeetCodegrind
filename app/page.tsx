@@ -1,5 +1,15 @@
 "use client";
-import { Button, Divider, Modal, Typography, Grid, Box } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Modal,
+  Typography,
+  Grid,
+  Box,
+  List,
+  ListItem,
+  TextField,
+} from "@mui/material";
 import { useEffect, useState, createContext, useContext } from "react";
 import DonutChart from "react-donut-chart";
 import Coder from "./components/Coder";
@@ -9,16 +19,60 @@ import { ProblemType, CoderType } from "./types/types";
 import Authentication from "./components/Authentication";
 import { LeetCode } from "leetcode-query";
 import { useUser } from "@clerk/nextjs";
+import { useUserContext } from "./contextProvider/userProvider";
+import { title } from "process";
 
 export default function Home() {
+  const username = useUserContext();
+  const [query, setQuery] = useState("");
+  const [friendRequestTab, setFriendRequestTab] = useState(false);
+  const [pendingRequestTab, setPendingRequestsTab] = useState(false);
+  const [deleteRequestTab, setdeleteRequestTab] = useState(false);
   const [coder, setCoder] = useState<CoderType | undefined>(undefined);
   const [problemset, setProblemset] = useState<ProblemType[]>([]);
   const [prompt, setPrompt] = useState("");
+  const [allUsers, setAllUsers] = useState<string[]>([]);
+  const [friendRequest, setFriendRequest] = useState<string[]>([]);
   const [leaderboard, setLeaderboard] = useState<
     { coder: string; total: number }[]
   >([]);
   const [result, setResult] = useState("");
-  const username = useUser().user?.primaryEmailAddress?.emailAddress;
+
+  const filtered = query
+    ? allUsers?.filter(
+        (user) =>
+          user?.toLowerCase()?.includes(query.toLowerCase()) &&
+          user !== username.username
+      ) ?? []
+    : allUsers?.filter((user) => user !== username.username) ?? [];
+
+  const pendingRequestTabOpen = async () => {
+    await getfriendrequests();
+    setPendingRequestsTab(true);
+  };
+
+  const addFriendModalOpen = async () => {
+    setFriendRequestTab(true);
+    await getAllUsers();
+    console.log();
+  };
+
+  const deleteFriendModalOpen = async () => {
+    setdeleteRequestTab(true);
+    await getAllUsers();
+  };
+
+  const pendingRequestTabClose = () => {
+    setPendingRequestsTab(false);
+  };
+
+  const addFriendModalClose = () => {
+    setFriendRequestTab(false);
+  };
+
+  const deleteFriendModalClose = () => {
+    setdeleteRequestTab(false);
+  };
 
   const getLeetCodeProblems = async () => {
     const res = await fetch("api/leetcode");
@@ -26,16 +80,23 @@ export default function Home() {
     console.log(data);
   };
 
-  const addFriend = async (freind: string) => {
+  const addFriendApi = async (friend: string) => {
     try {
       const res = await fetch("api/user/sendfriendrequest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, freind }),
+        body: JSON.stringify({ from: username.username, to: friend }),
       });
+      if (res.ok) {
+        await getAllUsers();
+      }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const addFriend = async (friend: string) => {
+    await addFriendApi(friend);
   };
 
   const airesponse = async () => {
@@ -48,6 +109,31 @@ export default function Home() {
     const data = await res.json();
     console.log(data.res);
     setResult(data.res);
+  };
+
+  const getfriendrequests = async () => {
+    const res = await fetch("api/user/getfreindrequests", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: username.username }),
+    });
+    const data = await res.json();
+    const stuff: string[] = data.data.reduce((acc: string[], request: any) => {
+      acc.push(request.username);
+      return acc;
+    }, []);
+    console.log(stuff);
+    console.log("friend requests:", data.data);
+    if (data.success) {
+      setFriendRequest(stuff);
+    }
+  };
+
+  const getAllUsers = async () => {
+    const res = await fetch("api/user/getallusers");
+    const allusers = await res.json();
+    setAllUsers(allusers.data);
+    console.log("allusers", allusers);
   };
 
   const setRohan = () => {
@@ -81,6 +167,52 @@ export default function Home() {
     );
     results.sort((a, b) => b.total - a.total);
     setLeaderboard(results);
+  };
+
+  const acceptFriendRequest = async (from: string) => {
+    try {
+      const res = await fetch("api/user/acceptfriendrequest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: username.username, from }),
+      });
+      if (res.ok) {
+        await getfriendrequests();
+        await getAllUsers();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const rejectFriendRequest = async (from: string) => {
+    try {
+      const res = await fetch("api/user/rejectfriendrequest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ from, user: username.username }),
+      });
+      if (res.ok) {
+        await getfriendrequests();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const removeFriend = async (friend: string) => {
+    try {
+      const res = await fetch("api/user/deletefriend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: username.username, friend }),
+      });
+      if (res.ok) {
+        await getAllUsers();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -136,6 +268,80 @@ export default function Home() {
             alignItems: "center",
           }}
         >
+          <Grid alignContent="center" padding={5} container spacing={10}>
+            <Button
+              sx={{
+                fontSize: 20,
+                py: 2,
+                borderRadius: 3,
+                background:
+                  "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
+                color: "black",
+                fontWeight: 700,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                mb: 1.5,
+                transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  background:
+                    "linear-gradient(90deg,rgb(137, 118, 46) 0%, #f7c873 100%)",
+                  color: "black",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+                },
+                width: 200,
+              }}
+              onClick={addFriendModalOpen}
+            >
+              Add Friend
+            </Button>
+            <Button
+              sx={{
+                fontSize: 20,
+                py: 2,
+                borderRadius: 3,
+                background:
+                  "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
+                color: "black",
+                fontWeight: 700,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                mb: 1.5,
+                transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  background:
+                    "linear-gradient(90deg,rgb(137, 118, 46) 0%, #f7c873 100%)",
+                  color: "black",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+                },
+                width: 200,
+              }}
+              onClick={pendingRequestTabOpen}
+            >
+              Pending Requests
+            </Button>
+            <Button
+              sx={{
+                fontSize: 20,
+                py: 2,
+                borderRadius: 3,
+                background:
+                  "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
+                color: "black",
+                fontWeight: 700,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                mb: 1.5,
+                transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  background:
+                    "linear-gradient(90deg,rgb(137, 118, 46) 0%, #f7c873 100%)",
+                  color: "black",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+                },
+                width: 200,
+              }}
+              onClick={deleteFriendModalOpen}
+            >
+              Remove Friend
+            </Button>
+          </Grid>
           {!coder && (
             <Box>
               <h1
@@ -197,54 +403,206 @@ export default function Home() {
                   ))}
                 </ol>
               </Box>
-              <Grid alignContent="center" padding={10} container spacing={10}>
-                <Button
+              <Modal open={friendRequestTab} onClose={addFriendModalClose}>
+                <Box
                   sx={{
-                    fontSize: 20,
-                    py: 2,
-                    borderRadius: 3,
-                    background:
-                      "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
-                    color: "black",
-                    fontWeight: 700,
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
-                    mb: 1.5,
-                    transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
-                    "&:hover": {
-                      background:
-                        "linear-gradient(90deg,rgb(137, 118, 46) 0%, #f7c873 100%)",
-                      color: "black",
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-                    },
-                    width: 200,
+                    position: "absolute",
+                    display: "flex",
+                    flexDirection: "column",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: { xs: "95vw", sm: "70vw", md: "40vw" },
+                    bgcolor: "background.paper",
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 2,
+                    height: "50%",
+                    maxHeight: "90vh",
                   }}
                 >
-                  Add Friend
-                </Button>
-                <Button
+                  <Typography variant="h6" mb={2}>
+                    Add a Friend
+                  </Typography>
+                  <TextField
+                    name="problemTitle"
+                    type="text"
+                    placeholder="Search for a user email"
+                    sx={{
+                      width: "100%",
+                      padding: "10px",
+                      marginBottom: "16px",
+                      fontSize: "16px",
+                      borderRadius: "4px",
+                      border: "1px solid #ccc",
+                      mb: 2,
+                    }}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                  <List
+                    sx={{
+                      flex: 1,
+                      minHeight: 0,
+                      width: "100%",
+                      overflowY: "auto",
+                    }}
+                  >
+                    {filtered?.map((user) => (
+                      <ListItem
+                        key={`add-friend-${user}`}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: 2,
+                          borderBottom: "1px solid #eee",
+                        }}
+                      >
+                        <Typography>{user}</Typography>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            background:
+                              "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
+                            color: "black",
+                          }}
+                          onClick={() => addFriend(user)}
+                        >
+                          Add Friend
+                        </Button>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              </Modal>
+              <Modal open={pendingRequestTab} onClose={pendingRequestTabClose}>
+                <Box
                   sx={{
-                    fontSize: 20,
-                    py: 2,
-                    borderRadius: 3,
-                    background:
-                      "linear-gradient(90deg,rgb(195, 163, 104) 0%,rgb(171, 152, 83) 50%)",
-                    color: "black",
-                    fontWeight: 700,
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
-                    mb: 1.5,
-                    transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
-                    "&:hover": {
-                      background:
-                        "linear-gradient(90deg,rgb(137, 118, 46) 0%, #f7c873 100%)",
-                      color: "black",
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-                    },
-                    width: 200,
+                    position: "absolute",
+                    display: "flex",
+                    flexDirection: "column",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: { xs: "95vw", sm: "70vw", md: "40vw" },
+                    bgcolor: "background.paper",
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 2,
+                    height: "50%",
+                    maxHeight: "90vh",
                   }}
                 >
-                  Remove Friend
-                </Button>
-              </Grid>
+                  <Typography variant="h6" mb={2}>
+                    Pending Friend Requests
+                  </Typography>
+                  <List
+                    sx={{
+                      flex: 1,
+                      minHeight: 0,
+                      width: "100%",
+                      overflowY: "auto",
+                    }}
+                  >
+                    {friendRequest?.map((request) => (
+                      <ListItem
+                        key={request}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: 2,
+                          borderBottom: "1px solid #eee",
+                        }}
+                      >
+                        <Typography>{request}</Typography>
+                        <Box sx={{ display: "flex", gap: 1 }}>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              background:
+                                "linear-gradient(90deg,rgb(104, 195, 163) 0%,rgb(83, 171, 152) 50%)",
+                              color: "black",
+                            }}
+                            onClick={() => acceptFriendRequest(request)}
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              background:
+                                "linear-gradient(90deg,rgb(195, 104, 104) 0%,rgb(171, 83, 83) 50%)",
+                              color: "black",
+                            }}
+                            onClick={() => rejectFriendRequest(request)}
+                          >
+                            Decline
+                          </Button>
+                        </Box>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              </Modal>
+              <Modal open={deleteRequestTab} onClose={deleteFriendModalClose}>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    display: "flex",
+                    flexDirection: "column",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: { xs: "95vw", sm: "70vw", md: "40vw" },
+                    bgcolor: "background.paper",
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 2,
+                    height: "50%",
+                    maxHeight: "90vh",
+                  }}
+                >
+                  <Typography variant="h6" mb={2}>
+                    Remove Friends
+                  </Typography>
+                  <List
+                    sx={{
+                      flex: 1,
+                      minHeight: 0,
+                      width: "100%",
+                      overflowY: "auto",
+                    }}
+                  >
+                    {allUsers?.map((user) => (
+                      <ListItem
+                        key={`remove-friend-${user}`}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: 2,
+                          borderBottom: "1px solid #eee",
+                        }}
+                      >
+                        <Typography>{user}</Typography>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            background:
+                              "linear-gradient(90deg,rgb(195, 104, 104) 0%,rgb(171, 83, 83) 50%)",
+                            color: "black",
+                          }}
+                          onClick={() => removeFriend(user)}
+                        >
+                          Remove
+                        </Button>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              </Modal>
             </Box>
           )}
           {coder && <Coder coder={coder} />}

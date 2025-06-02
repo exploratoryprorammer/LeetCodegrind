@@ -5,7 +5,7 @@ export async function POST(request: Request) {
     const { name } = await request.json()
     const collection = await getUsersCollection()
     const existing = await collection.findOne({ name })
-    if(!existing) {
+    if(!existing && name) {
         await collection.insertOne({ name, friends: [], friend_request: [], sent_request: [], daily_goal: 2, summer_goal: 150})
     }
     return NextResponse.json({ success: true})
