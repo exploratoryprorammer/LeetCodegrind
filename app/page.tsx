@@ -149,7 +149,7 @@ export default function Home() {
         <SidebarButton onClick={setRohan} label="Rohan" />
         <SidebarButton onClick={setMathew} label="Mathew" />
         <SidebarButton onClick={setGerson} label="Gerson" />
-        <SidebarButton onClick={setFranck} label="Bhargav" />
+        <SidebarButton onClick={setFranck} label="Franck" />
       </Box>
       <Box
         sx={{
