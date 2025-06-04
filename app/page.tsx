@@ -53,8 +53,8 @@ export default function Home() {
     setCoder("Gerson");
   };
 
-  const setBarghav = () => {
-    setCoder("Bhargav");
+  const setFranck = () => {
+    setCoder("Franck");
   };
 
   const setHome = () => {
@@ -93,7 +93,7 @@ export default function Home() {
   };
 
   const fetchLeaderboard = async () => {
-    const coders = ["Rohan", "Gerson", "Bhargav", "Mathew"];
+    const coders = ["Rohan", "Gerson", "Franck", "Mathew"];
     const results = await Promise.all(
       coders.map(async (c) => {
         const res = await fetch("/api/getproblems", {
@@ -149,7 +149,7 @@ export default function Home() {
         <SidebarButton onClick={setRohan} label="Rohan" />
         <SidebarButton onClick={setMathew} label="Mathew" />
         <SidebarButton onClick={setGerson} label="Gerson" />
-        <SidebarButton onClick={setBarghav} label="Bhargav" />
+        <SidebarButton onClick={setFranck} label="Bhargav" />
       </Box>
       <Box
         sx={{
@@ -781,7 +781,7 @@ export default function Home() {
             </div>
           </Box>
         )}
-        {coder == "Bhargav" && (
+        {coder == "Franck" && (
           <Box>
             <Divider sx={{ marginLeft: 0 }}>
               <Typography variant="h4" align="center">
