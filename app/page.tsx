@@ -946,7 +946,7 @@ export default function Home() {
                   },
                   {
                     label: "Incomplete",
-                    value: Math.max(1 - today, 0),
+                    value: Math.max(2 - today, 0),
                   },
                 ]}
               />
@@ -959,7 +959,7 @@ export default function Home() {
                   },
                   {
                     label: "Incomplete",
-                    value: Math.max(100 - total, 0),
+                    value: Math.max(150 - total, 0),
                   },
                 ]}
               />
